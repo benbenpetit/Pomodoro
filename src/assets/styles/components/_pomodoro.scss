@@ -1,0 +1,54 @@
+@use '../abstracts/' as *;
+
+.pomodoro {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 16px;
+
+  &__title {
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  &__timer {
+    position: relative;
+    padding: 30px 40px;
+
+    &__circle {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 9999px;
+      border: 8px solid currentColor;
+      pointer-events: none;
+
+      &.-worktime {
+        border: 8px solid $worktime;
+      }
+    
+      &.-pausetime {
+        border: 8px solid $pausetime;
+      }
+    
+      &.-is-stopped {
+        border: 8px solid rgb(226, 226, 226);
+      }
+    }
+
+    &__countdown {
+      font-size: 6vw;
+      font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+      vertical-align: bottom;
+    }
+  }
+
+  &__options {
+    display: flex;
+    column-gap: 10px;
+  }
+}

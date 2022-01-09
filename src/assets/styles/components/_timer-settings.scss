@@ -1,0 +1,126 @@
+@use "../abstracts/" as *;
+
+.timer-settings {
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+
+  &__forms {
+    flex: 1 0 0;
+    padding-top: 40px;
+
+    > div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+
+      h3 {
+        font-size: 24px;
+        display: inline-block;
+      }
+
+      form {
+        margin: 16px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+
+        > div {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: center;
+          column-gap: 10px;
+
+          input {
+            border: 1px solid rgb(223, 223, 223);
+            text-align: center;
+            outline: none;
+            font-size: 60px;
+            width: 100%;
+            max-width: 4ch;
+            border-radius: 12px;
+            padding: 40px 10px;
+          }
+
+          span {
+            font-size: 30px;
+          }
+        }
+
+        .submit-btn {
+          padding: 8px 12px;
+          border-radius: 12px;
+
+          $colors: (
+            "red": $worktime,
+            "blue": $pausetime
+          );
+          @each $label, $color in $colors {
+            &.-#{$label} {
+              color: $color;
+              border: 2px solid currentColor;
+              background-color: #fff;
+
+              &:hover {
+                color: #fff;
+                background-color: $color;
+              }
+            }
+          }
+
+          &[disabled] {
+            color: rgb(88, 88, 88);
+            border: 2px solid rgb(230, 230, 230);
+            background-color: rgb(230, 230, 230);
+
+            &:hover {
+              color: rgb(88, 88, 88);
+              border: 2px solid rgb(230, 230, 230);
+              background-color: rgb(230, 230, 230);
+              cursor: not-allowed;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &__switch {
+    display: flex;
+    column-gap: 2px;
+
+    button {
+      padding: 10px 16px;
+      font-size: 18px;
+      background-color: rgb(245, 245, 245);
+
+      &.is-active {
+        outline: 2px dashed currentColor;
+      }
+
+      &:nth-child(1) {
+        border-radius: 8px 0 0 8px;
+
+        &.is-active {
+          color: $worktime;
+          outline: 2px dashed currentColor;
+        }
+      }
+
+      &:nth-child(2) {
+        border-radius: 0 8px 8px 0;
+
+        &.is-active {
+          color: $pausetime;
+          outline: 2px dashed currentColor;
+        }
+      }
+    }
+  }
+}

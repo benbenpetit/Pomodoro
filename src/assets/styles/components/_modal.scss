@@ -1,0 +1,31 @@
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px 30px;
+  background-color: rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+
+  &__content {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    padding: 30px;
+    -webkit-overflow-scrolling: 'touch';
+    border-radius: 12px;
+    cursor: initial;
+
+    &__close-btn {
+      position: absolute;
+      right: 12px;
+      top: 12px;
+    }
+  }
+}
