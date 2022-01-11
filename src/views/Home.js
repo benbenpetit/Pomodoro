@@ -1,8 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
-import Button from "components/Button";
-import Modal from "utils/Modal";
-import TimerSettings from "components/TimerSettings";
+import { useState, useEffect, useCallback } from "react";
 import {
   PauseIcon,
   PlayIcon,
@@ -10,6 +7,10 @@ import {
   CogIcon,
   ChevronDoubleRightIcon
 } from "@heroicons/react/outline";
+import Timer from "components/Timer";
+import TimerSettings from "components/TimerSettings";
+import Button from "components/Button";
+import Modal from "utils/Modal";
 
 const Home = () => {
   const [selectedWorktimeMinutes, setSelectedWorktimeMinutes] = useState(25);
@@ -23,30 +24,36 @@ const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleChangeWorktime = (time) => {
-    console.log(time);
-    setSelectedWorktimeMinutes(time.minutes);
-    setSelectedWorktimeSeconds(time.seconds);
+      setSelectedWorktimeMinutes(time.minutes);
+      setSelectedWorktimeSeconds(time.seconds);
+      setWorkSession(time.minutes, time.seconds);
+      setIsPlaying(false);
   };
 
   const handleChangePausetime = (time) => {
-    console.log(time);
     setSelectedPausetimeMinutes(time.minutes);
     setSelectedPausetimeSeconds(time.seconds);
+    setPauseSession(time.minutes, time.seconds);
+    setIsPlaying(false);
   };
 
-  const setWorkSession = () => {
-    setIsPlaying(true);
-    setIsWorktime(true);
-    setMinutes(selectedWorktimeMinutes);
-    setSeconds(selectedWorktimeSeconds);
-  };
+  const setWorkSession = useCallback((worktimeMins = selectedWorktimeMinutes, worktimeSecs = selectedWorktimeSeconds) => {
+      setIsPlaying(true);
+      setIsWorktime(true);
+      setMinutes(worktimeMins);
+      setSeconds(worktimeSecs);
+    },
+    [selectedWorktimeMinutes, selectedWorktimeSeconds],
+  );
 
-  const setPauseSession = () => {
-    setIsPlaying(true);
-    setIsWorktime(false);
-    setMinutes(selectedPausetimeMinutes);
-    setSeconds(selectedPausetimeSeconds);
-  };
+  const setPauseSession = useCallback((pausetimeMins = selectedPausetimeMinutes, pausetimeSecs = selectedPausetimeSeconds) => {
+      setIsPlaying(true);
+      setIsWorktime(false);
+      setMinutes(pausetimeMins);
+      setSeconds(pausetimeSecs);
+    },
+    [selectedPausetimeMinutes, selectedPausetimeSeconds],
+  );
 
   const resetTimer = () => {
     setWorkSession();
@@ -77,7 +84,7 @@ const Home = () => {
     }
 
     return () => clearInterval(interval);
-  }, [minutes, seconds, isPlaying]);
+  }, [minutes, seconds, isPlaying, isWorktime, setPauseSession, setWorkSession]);
 
   const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
   const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
@@ -85,15 +92,7 @@ const Home = () => {
   return (
     <main className="home">
       <section className="pomodoro">
-        <h1 className="pomodoro__title">
-          {isWorktime ? "Work time" : "Pause time"}
-        </h1>
-        <div className="pomodoro__timer">
-          <span className={"pomodoro__timer__circle " + (isWorktime ? "-worktime" : "-pausetime") + " " + (isPlaying ? "-is-playing" : "-is-stopped")}></span>
-          <span className="pomodoro__timer__countdown">
-            {formattedMinutes}:{formattedSeconds}
-          </span>
-        </div>
+        <Timer isWorktime={isWorktime} isPlaying={isPlaying} formattedMinutes={formattedMinutes} formattedSeconds={formattedSeconds} />
         <div className="pomodoro__options">
           <Button title={isPlaying ? "Play" : "Pause"} onClick={() => setIsPlaying(!isPlaying)}>
             {isPlaying ? <PauseIcon /> : <PlayIcon />}
